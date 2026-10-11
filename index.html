@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Ultra-Luxury Interior Design</title>
+    
+    <!-- Ultra-Premium Typography: Playfair Display for headings, Montserrat for clean, modern body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lux: {
+                            gold: '#D4AF37',       /* Classic warm luxury gold */
+                            gold_light: '#F3E5AB', /* Bright highlight gold */
+                            dark: '#030303',       /* Deepest obsidian black */
+                            charcoal: '#111111',   /* Soft dark background */
+                            glass: 'rgba(20, 20, 20, 0.45)', /* Dark glass base */
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-bg': "url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2500&q=100')",
+                    },
+                    animation: {
+                        'slow-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #030303;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* The Premium Glass Effect */
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.6) 0%, rgba(10, 10, 10, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-nav {
+            background: rgba(3, 3, 3, 0.5);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s ease;
+        }
+
+        .glass-nav.scrolled {
+            background: rgba(3, 3, 3, 0.85);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gold Lighting & Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .gold-glow-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .gold-glow-hover:hover {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            border-color: rgba(212, 175, 55, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Input Styling to remove ugly browser defaults */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.2s; }
+        .reveal-delay-2 { transition-delay: 0.4s; }
+
+        /* Dynamic Background Ambient Orb */
+        .ambient-orb {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(3,3,3,0) 70%);
+            top: -10%;
+            right: -10%;
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-lux-gold selection:text-lux-dark relative">
+
+    <!-- Ambient Background Light -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="ambient-orb animate-pulse" style="animation-duration: 8s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 glass-nav" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-full border-[1px] border-lux-gold flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-lux-gold scale-0 group-hover:scale-100 transition-transform duration-500 rounded-full origin-center"></div>
+                    <span class="font-serif text-lux-gold group-hover:text-lux-dark transition-colors duration-500 font-bold text-xl relative z-10">A</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif text-2xl tracking-[0.15em] text-white leading-none">AURA</span>
+                    <span class="font-sans text-[0.55rem] uppercase tracking-[0.3em] text-lux-gold mt-1">Design Studio</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex gap-10 items-center text-xs uppercase tracking-[0.2em] font-light text-gray-400">
+                <a href="#hero" class="hover:text-white transition-colors">Philosophy</a>
+                <a href="#gallery" class="hover:text-white transition-colors">Curated Spaces</a>
+                <a href="#calculator" class="px-6 py-3 border border-lux-gold/30 text-lux-gold hover:bg-lux-gold hover:text-lux-dark transition-all duration-300 rounded-sm">Consultation</a>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <button class="md:hidden text-lux-gold focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center bg-hero-bg bg-cover bg-center bg-fixed">
+        <!-- Cinematic dark gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-lux-dark via-lux-dark/80 to-transparent z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-lux-dark via-transparent to-transparent z-0"></div>
+        
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 mt-20">
+            <div class="max-w-3xl reveal">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-[1px] w-12 bg-lux-gold"></div>
+                    <span class="text-lux-gold uppercase tracking-[0.4em] text-xs font-semibold">Masterpieces of Living</span>
+                </div>
+                
+                <h1 class="font-serif text-6xl md:text-8xl text-white mb-8 leading-[1.1] font-light">
+                    The Art of <br/>
+                    <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-lux-gold to-lux-gold_light glow-text">Atmosphere.</span>
+                </h1>
+                
+                <p class="text-gray-400 text-lg md:text-xl font-light leading-relaxed mb-12 max-w-xl">
+                    We sculpt light, texture, and space to create ultra-premium environments that resonate with your definition of absolute luxury.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="#calculator" class="bg-lux-gold text-lux-dark px-10 py-4 uppercase tracking-[0.2em] text-xs font-bold text-center hover:bg-white transition-colors duration-300">
+                        Estimate Investment
+                    </a>
+                    <a href="#gallery" class="px-10 py-4 uppercase tracking-[0.2em] text-xs text-white border border-white/20 text-center hover:border-lux-gold hover:text-lux-gold transition-colors duration-300">
+                        Explore Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-12 left-6 lg:left-12 z-10 flex flex-col items-center gap-4 reveal reveal-delay-2">
+            <span class="text-[10px] tracking-[0.3em] uppercase text-gray-500" style="writing-mode: vertical-rl;">Discover</span>
+            <div class="w-[1px] h-16 bg-gradient-to-b from-lux-gold to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- The Core Feature: Luxury Calculator -->
+    <section id="calculator" class="py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <!-- Section Header -->
+            <div class="text-center mb-20 reveal">
+                <span class="text-lux-gold uppercase tracking-[0.3em] text-xs font-semibold mb-3 block">Transparent Excellence</span>
+                <h2 class="font-serif text-4xl md:text-5xl text-white">Investment <span class="italic text-lux-gold/80">Projections</span></h2>
+            </div>
+
+            <!-- Calculator Layout -->
+            <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+                
+                <!-- Left: Interactive Form -->
+                <div class="w-full lg:w-7/12 space-y-12 reveal">
+                    
+                    <!-- 1. Space Dimensions -->
+                    <div class="glass-panel p-8 rounded-xl border border-white/5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-lux-gold"></div>
+                        <h3 class="font-serif text-2xl text-white mb-6">1. Space Dimensions</h3>
+                        
+                        <div class="relative">
+                            <label class="block text-xs uppercase tracking-widest text-gray-400 mb-3">Total Carpet Area</label>
+                            <div class="flex items-center border-b border-gray-600 focus-within:border-lux-gold transition-colors pb-2">
+                                <input type="number" id="sqft" placeholder="0" class="w-full bg-transparent text-4xl font-serif text-white focus:outline-none placeholder-gray-700">
+                                <span class="text-lux-gold text-sm tracking-widest uppercase ml-4">Sq.Ft</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Scope of Design -->
+                    <div class="glass-panel p-8 rounded-xl border border-white/5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-lux-gold opacity-50"></div>
+                        <h3 class="font-serif text-2xl text-white mb-6">2. Scope of Design</h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="scope-container">
+                            <!-- Custom Radio Cards via Label -->
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="scope" value="full" class="peer sr-only" checked>
+                                <div class="border border-white/10 bg-black/40 p-4 h-full flex flex-col items-center justify-center text-center rounded-lg peer-checked:border-lux-gold peer-checked:bg-lux-gold/5 gold-glow-hover transition-all">
+                                    <span class="text-white font-serif text-lg mb-1">Complete</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">End-to-End</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="scope" value="living" class="peer sr-only">
+                                <div class="border border-white/10 bg-black/40 p-4 h-full flex flex-col items-center justify-center text-center rounded-lg peer-checked:border-lux-gold peer-checked:bg-lux-gold/5 gold-glow-hover transition-all">
+                                    <span class="text-white font-serif text-lg mb-1">Living</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">Lounge & Dine</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="scope" value="bedroom" class="peer sr-only">
+                                <div class="border border-white/10 bg-black/40 p-4 h-full flex flex-col items-center justify-center text-center rounded-lg peer-checked:border-lux-gold peer-checked:bg-lux-gold/5 gold-glow-hover transition-all">
+                                    <span class="text-white font-serif text-lg mb-1">Bedroom</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">Master Suites</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="scope" value="kitchen" class="peer sr-only">
+                                <div class="border border-white/10 bg-black/40 p-4 h-full flex flex-col items-center justify-center text-center rounded-lg peer-checked:border-lux-gold peer-checked:bg-lux-gold/5 gold-glow-hover transition-all">
+                                    <span class="text-white font-serif text-lg mb-1">Kitchen</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-widest">Modular Lux</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 3. Material Fidelity -->
+                    <div class="glass-panel p-8 rounded-xl border border-white/5 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-lux-gold opacity-30"></div>
+                        <h3 class="font-serif text-2xl text-white mb-6">3. Material Fidelity</h3>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-center p-5 border border-white/10 bg-black/40 rounded-lg cursor-pointer peer-checked:border-lux-gold group transition-colors">
+                                <input type="radio" name="fidelity" value="premium" class="w-5 h-5 accent-lux-gold bg-transparent border-gray-600 focus:ring-lux-gold focus:ring-1" checked>
+                                <div class="ml-4">
+                                    <h4 class="text-white font-serif text-xl">Premium Edition</h4>
+                                    <p class="text-xs text-gray-400 mt-1">High-grade Indian materials, exquisite domestic finishes.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center p-5 border border-white/10 bg-black/40 rounded-lg cursor-pointer peer-checked:border-lux-gold group transition-colors">
+                                <input type="radio" name="fidelity" value="luxury" class="w-5 h-5 accent-lux-gold bg-transparent border-gray-600 focus:ring-lux-gold focus:ring-1">
+                                <div class="ml-4">
+                                    <h4 class="text-white font-serif text-xl">Luxury Imported</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Italian marbles, German hardware, specialized lighting arrays.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center p-5 border border-white/10 bg-black/40 rounded-lg cursor-pointer peer-checked:border-lux-gold group transition-colors">
+                                <input type="radio" name="fidelity" value="bespoke" class="w-5 h-5 accent-lux-gold bg-transparent border-gray-600 focus:ring-lux-gold focus:ring-1">
+                                <div class="ml-4">
+                                    <h4 class="text-lux-gold font-serif text-xl glow-text">Bespoke Ultra</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Custom-crafted furniture, rare imported stones, full home automation.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: The Investment Reveal Card (Sticky) -->
+                <div class="w-full lg:w-5/12 reveal reveal-delay-1">
+                    <div class="sticky top-32 glass-panel p-10 lg:p-14 rounded-2xl border border-lux-gold/20 flex flex-col justify-center items-center text-center min-h-[500px] relative overflow-hidden group">
+                        
+                        <!-- Animated background glow for the card -->
+                        <div class="absolute inset-0 bg-gradient-to-b from-lux-gold/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        
+                        <div class="relative z-10 w-full">
+                            <span class="text-xs uppercase tracking-[0.3em] text-gray-400 mb-4 block">Projected Investment</span>
+                            
+                            <!-- The dynamic number -->
+                            <div class="my-8 relative">
+                                <span class="absolute -left-6 top-2 text-2xl text-lux-gold">₹</span>
+                                <h2 id="display-price" class="font-serif text-6xl lg:text-7xl text-white glow-text tracking-tight transition-all duration-500 ease-out">
+                                    0
+                                </h2>
+                            </div>
+
+                            <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-gray-600 to-transparent my-8"></div>
+                            
+                            <p class="text-[11px] text-gray-500 uppercase tracking-widest leading-relaxed mb-10">
+                                This is an algorithmic projection. Final quotations require an on-site evaluation by our master architects.
+                            </p>
+
+                            <button onclick="alert('Client portal would open here.')" class="w-full bg-transparent border-2 border-lux-gold text-lux-gold py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-lux-gold hover:text-lux-dark transition-all duration-500">
+                                Request Master Consultation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Gallery Section -->
+    <section id="gallery" class="py-24 bg-[#050505] relative z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex justify-between items-end mb-16 reveal">
+                <div>
+                    <span class="text-lux-gold uppercase tracking-[0.3em] text-xs font-semibold mb-2 block">Portfolio</span>
+                    <h2 class="font-serif text-4xl text-white">Curated <span class="italic text-gray-400">Spaces</span></h2>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Image 1 -->
+                <div class="group relative h-[500px] overflow-hidden reveal">
+                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Luxury Living" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                    <div class="absolute bottom-8 left-8 right-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <span class="text-lux-gold text-xs uppercase tracking-[0.3em] mb-2 block">Living Space</span>
+                        <h3 class="text-2xl font-serif text-white">The Obsidian Lounge</h3>
+                    </div>
+                </div>
+
+                <!-- Image 2 -->
+                <div class="group relative h-[500px] overflow-hidden reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Luxury Bedroom" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                    <div class="absolute bottom-8 left-8 right-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <span class="text-lux-gold text-xs uppercase tracking-[0.3em] mb-2 block">Master Suite</span>
+                        <h3 class="text-2xl font-serif text-white">Amber Sanctuary</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-16 border-t border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="mb-8 flex justify-center">
+                <div class="w-12 h-12 rounded-full border border-lux-gold/50 flex items-center justify-center">
+                    <span class="font-serif text-lux-gold text-2xl">A</span>
+                </div>
+            </div>
+            <p class="font-serif text-2xl tracking-[0.2em] text-white mb-2">AURA</p>
+            <p class="text-gray-600 text-xs tracking-[0.4em] uppercase mb-12">Ultra-Luxury Interiors</p>
+            
+            <div class="flex justify-center gap-8 mb-12 text-xs uppercase tracking-widest text-gray-500">
+                <a href="#" class="hover:text-lux-gold transition-colors">Instagram</a>
+                <a href="#" class="hover:text-lux-gold transition-colors">Pinterest</a>
+                <a href="#" class="hover:text-lux-gold transition-colors">Contact</a>
+            </div>
+
+            <p class="text-[#333] text-[10px] tracking-widest uppercase">
+                &copy; 2026 Aura Design Studio. Crafted for Prestige.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- 1. Navbar Scroll Effect --- */
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            /* --- 2. Scroll Reveal Animations (Intersection Observer) --- */
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: stop observing once revealed
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+
+
+            /* --- 3. Ultra-Premium Calculator Engine --- */
+            
+            const sqftInput = document.getElementById('sqft');
+            const scopeRadios = document.querySelectorAll('input[name="scope"]');
+            const fidelityRadios = document.querySelectorAll('input[name="fidelity"]');
+            const displayPrice = document.getElementById('display-price');
+            
+            // Base Rates (INR per Sq.Ft) - Set for High-End Market
+            const rates = {
+                'full': 3500,     // Complete home base
+                'living': 2800,   // Living room requires heavy aesthetics
+                'bedroom': 2500,  // Bedroom
+                'kitchen': 5000   // Kitchens are highly technical and expensive
+            };
+
+            // Multipliers for Material Fidelity
+            const multipliers = {
+                'premium': 1.0,    // Base high-end
+                'luxury': 1.8,     // Imported materials
+                'bespoke': 3.5     // Ultra high-end, custom everything
+            };
+
+            // Format number to beautiful Indian Rupees string
+            const formatter = new Intl.NumberFormat('en-IN', {
+                maximumFractionDigits: 0
+            });
+
+            // Smooth counting animation variables
+            let currentDisplayValue = 0;
+            let targetValue = 0;
+            let animationFrameId = null;
+
+            // Function to smoothly animate numbers
+            function animateValue() {
+                // Easing function for smooth stop
+                const ease = 0.1; 
+                const diff = targetValue - currentDisplayValue;
+                
+                // If we are close enough, snap to target
+                if (Math.abs(diff) < 10) {
+                    currentDisplayValue = targetValue;
+                    displayPrice.innerText = formatter.format(Math.round(currentDisplayValue));
+                    cancelAnimationFrame(animationFrameId);
+                    return;
+                }
+
+                currentDisplayValue += diff * ease;
+                displayPrice.innerText = formatter.format(Math.round(currentDisplayValue));
+                
+                animationFrameId = requestAnimationFrame(animateValue);
+            }
+
+            // Main Calculate Function
+            function calculateCost() {
+                const sqft = parseFloat(sqftInput.value) || 0;
+                
+                let selectedScope = 'full';
+                scopeRadios.forEach(r => { if(r.checked) selectedScope = r.value; });
+                
+                let selectedFidelity = 'premium';
+                fidelityRadios.forEach(r => { if(r.checked) selectedFidelity = r.value; });
+
+                const baseRate = rates[selectedScope];
+                const mult = multipliers[selectedFidelity];
+                
+                targetValue = sqft * baseRate * mult;
+
+                // Add a subtle CSS pulse to the number when calculating
+                displayPrice.style.transform = "scale(1.05)";
+                displayPrice.style.textShadow = "0 0 40px rgba(212, 175, 55, 0.8)";
+                
+                setTimeout(() => {
+                    displayPrice.style.transform = "scale(1)";
+                    displayPrice.style.textShadow = "0 0 20px rgba(212, 175, 55, 0.4)";
+                }, 200);
+
+                // Start the smooth counting animation
+                if(animationFrameId) cancelAnimationFrame(animationFrameId);
+                animateValue();
+            }
+
+            // Attach listeners to all inputs
+            sqftInput.addEventListener('input', calculateCost);
+            scopeRadios.forEach(r => r.addEventListener('change', calculateCost));
+            fidelityRadios.forEach(r => r.addEventListener('change', calculateCost));
+
+            // Custom UI update for the radio buttons to ensure border highlights work on the parent
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // This forces a repaint on the label wrappers if needed by older browsers
+                    this.parentElement.style.display = 'none';
+                    this.parentElement.offsetHeight; // no need to store this anywhere, the reference is enough
+                    this.parentElement.style.display = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
